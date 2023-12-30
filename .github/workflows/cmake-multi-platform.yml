@@ -4,9 +4,9 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "action-config" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "action-config" ]
 
 jobs:
   build:
@@ -38,14 +38,14 @@ jobs:
             cpp_compiler: g++
             conan_compiler: gcc
             compiler_version: 11
-            libcxx: --settings=compiler.libcxx=libstdc++
+            libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
             conan_compiler: clang
             compiler_version: 15
-            libcxx: --settings=compiler.libcxx=libc++
+            libcxx: --settings=compiler.libcxx=libc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
             cmd: sudo apt-get install libc++-dev
 #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/runner/.bashrc && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install libcxx
