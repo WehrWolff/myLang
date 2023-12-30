@@ -4,9 +4,9 @@ name: CMake on ubuntu, clang
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "action-config" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "action-config" ]
 
 jobs:
   build:
