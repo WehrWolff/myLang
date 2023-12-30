@@ -31,5 +31,5 @@ target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
 target_link_libraries(babel_tests PRIVATE ${Boost_LIBRARIES})
 
 # Enable testing (GTest::Main will handle test discovery and execution)
-# enable_testing()
-# add_test(NAME BabelTests COMMAND babel_tests)
+enable_testing()
+add_test(NAME BabelTests COMMAND babel_tests)
