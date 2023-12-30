@@ -57,3 +57,8 @@ TEST(LRTableTest, AnotherLRTable) {
     ASSERT_EQ("4", (*std::next(lrTable1.states.begin(), 3)).mapping.at("A").toString());
     ASSERT_EQ("r3", (*std::next(lrTable1.states.begin(), 9)).mapping.at(")").toString());
 }
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
