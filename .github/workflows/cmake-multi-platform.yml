@@ -97,6 +97,9 @@ jobs:
         ctest --build-config ${{ matrix.build_type }} --output-on-failure
         ls
         echo "======================="
+        cd Testing
+        ls
+        echo "======================="
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
