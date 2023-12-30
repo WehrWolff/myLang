@@ -29,7 +29,7 @@ TEST(ParserTest, Parse) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
     LRClosureTable lrClosureTable(grammar);
     LRTable lrTable(lrClosureTable);
-    Parser parser({"a", "a", "a"}, lrTable);
+    Parser parser(lrTable, {"a", "a", "a"});
     ASSERT_NO_THROW(parser.parse());
 }
 
