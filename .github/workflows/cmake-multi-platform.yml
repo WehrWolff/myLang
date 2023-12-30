@@ -98,10 +98,7 @@ jobs:
         ctest --build-config ${{ matrix.build_type }} --output-on-failure
         ls
         echo "======================="
-        cd Testing
-        ls
-        echo "======================="
-        cd Temporary
+        cd CMakeFiles
         ls
         echo "======================="
 
