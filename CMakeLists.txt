@@ -9,6 +9,8 @@ set(SOURCE_FILES
     src/shell.cpp
 )
 
+add_compile_options(--coverage)
+
 find_package(Boost 1.83.0 REQUIRED COMPONENTS algorithm)
 
 add_executable(babel ${SOURCE_FILES})
