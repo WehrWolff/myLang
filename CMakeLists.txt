@@ -26,8 +26,9 @@ include_directories(src test)
 find_package(GTest REQUIRED)
 
 add_executable(babel_tests ${TEST_FILES})
-target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})  # Include GTest directories
+target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
+target_link_libraries(babel PRIVATE ${Boost_LIBRARIES})
 
 # Enable testing (GTest::Main will handle test discovery and execution)
 # enable_testing()
