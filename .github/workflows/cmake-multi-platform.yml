@@ -82,6 +82,7 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/${{ matrix.conan_toolchain_path }}
+        -DCODE_COVERAGE=ON
         -S ${{ github.workspace }}
       #-G "Unix Makefiles"
 
