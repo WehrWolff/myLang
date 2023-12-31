@@ -25,17 +25,11 @@ set(TEST_FILES
 include_directories(src test)
 find_package(GTest REQUIRED)
 
-add_executable(babel_tests ${TEST_FILES})
+add_executable(babel_tests ${TEST_FILES} coverage.info)
+target_compile_options(babel_tests PRIVATE -g -O0 --coverage)
 target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
 target_link_libraries(babel_tests PRIVATE ${Boost_LIBRARIES})
-
-# Enable code coverage only for the test executable
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(babel_tests PRIVATE -g -O0 --coverage -o coverage.info)
-    target_link_options(babel_tests PRIVATE --coverage)
-endif()
-
 
 # Enable testing (GTest::Main will handle test discovery and execution)
 enable_testing()
