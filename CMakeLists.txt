@@ -50,16 +50,23 @@ add_test(NAME BabelTests COMMAND babel_tests)
 #    COMMENT "Generating coverage information..."
 #)
 
-# Code coverage with lcov
-find_program(LCOV_EXECUTABLE lcov)
-find_program(GENHTML_EXECUTABLE genhtml)
 
-if (LCOV_EXECUTABLE AND GENHTML_EXECUTABLE)
+
+# Add the following lines to enable code coverage
+if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+    target_compile_options(babel PRIVATE --coverage)
+    target_link_libraries(babel PRIVATE --coverage)
+endif()
+
+# Add a custom target for generating coverage reports
+if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_custom_target(coverage
-        COMMAND ${LCOV_EXECUTABLE} --capture --directory . --output-file coverage.info
-        COMMAND ${LCOV_EXECUTABLE} --remove coverage.info '/usr/*' --output-file coverage.info
-        COMMAND ${LCOV_EXECUTABLE} --remove coverage.info 'tests/*' --output-file coverage.info
-        COMMAND ${GENHTML_EXECUTABLE} -o coverage_report coverage.info
+        COMMAND lcov --directory . --capture --output-file coverage.info
+        COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
+        COMMAND lcov --list coverage.info
+        COMMAND genhtml coverage.info --output-directory coverage_report
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         COMMENT "Generating code coverage report"
     )
