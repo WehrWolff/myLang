@@ -113,6 +113,9 @@ jobs:
         cd Testing
         ls
         echo "======================="
+        cd Temporary
+        ls
+        echo "======================="
         cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
