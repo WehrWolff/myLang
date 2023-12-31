@@ -30,21 +30,37 @@ target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
 target_link_libraries(babel_tests PRIVATE ${Boost_LIBRARIES})
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(-fprofile-arcs -ftest-coverage)
-    add_link_options(-lgcov)
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
 # Enable testing (GTest::Main will handle test discovery and execution)
 enable_testing()
 add_test(NAME BabelTests COMMAND babel_tests)
 
-add_custom_target(coverage
-    COMMAND ${CMAKE_COMMAND} -E remove coverage.info
-    COMMAND lcov --capture --directory . --output-file coverage.info
-    COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
-    COMMAND lcov --list coverage.info
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    DEPENDS babel_tests
-    COMMENT "Generating coverage information..."
-)
+#add_custom_target(coverage
+#    COMMAND ${CMAKE_COMMAND} -E remove coverage.info
+#    COMMAND lcov --capture --directory . --output-file coverage.info
+#    COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
+#    COMMAND lcov --list coverage.info
+#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#    DEPENDS babel_tests
+#    COMMENT "Generating coverage information..."
+#)
+
+# Code coverage with lcov
+find_program(LCOV_EXECUTABLE lcov)
+find_program(GENHTML_EXECUTABLE genhtml)
+
+if (LCOV_EXECUTABLE AND GENHTML_EXECUTABLE)
+    add_custom_target(coverage
+        COMMAND ${LCOV_EXECUTABLE} --capture --directory . --output-file coverage.info
+        COMMAND ${LCOV_EXECUTABLE} --remove coverage.info '/usr/*' --output-file coverage.info
+        COMMAND ${LCOV_EXECUTABLE} --remove coverage.info 'tests/*' --output-file coverage.info
+        COMMAND ${GENHTML_EXECUTABLE} -o coverage_report coverage.info
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Generating code coverage report"
+    )
+endif()
