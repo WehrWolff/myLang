@@ -99,15 +99,13 @@ jobs:
       
       #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
       run: |
-        export GCOV_PREFIX="${{ github.workspace }}"
-        export GCOV_PREFIX_STRIP="1"
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
-        cmake --build . --target coverage
         ls
         echo "======================="
         cd CMakeFiles
         ls
         echo "======================="
+        cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
