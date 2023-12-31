@@ -105,6 +105,14 @@ jobs:
         cd CMakeFiles
         ls
         echo "======================="
+        cd CMakeScratch
+        ls
+        echo "======================="
+        cd ..
+        cd ..
+        cd Testing
+        ls
+        echo "======================="
         cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
