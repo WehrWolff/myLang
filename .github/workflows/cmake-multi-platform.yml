@@ -100,22 +100,6 @@ jobs:
       #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
       run: |
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
-        ls
-        echo "======================="
-        cd CMakeFiles
-        ls
-        echo "======================="
-        cd CMakeScratch
-        ls
-        echo "======================="
-        cd ..
-        cd ..
-        cd Testing
-        ls
-        echo "======================="
-        cd Temporary
-        ls
-        echo "======================="
         cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
