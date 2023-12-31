@@ -30,14 +30,7 @@ target_compile_options(babel_tests PRIVATE -g -O0 --coverage)
 target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
 target_link_libraries(babel_tests PRIVATE ${Boost_LIBRARIES})
-target_link_libraries(babel_tests PRIVATE gcov)
 
 # Enable testing (GTest::Main will handle test discovery and execution)
 enable_testing()
 add_test(NAME BabelTests COMMAND babel_tests)
-
-# Generate coverage report as a post-build step
-add_custom_command(TARGET babel_tests POST_BUILD
-                 COMMAND llvm-profdata merge -sparse -o coverage.profraw coverage.info
-                 COMMAND llvm-cov show -format=html -instr-profile=coverage.profraw babel_tests > coverage.html
-                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
