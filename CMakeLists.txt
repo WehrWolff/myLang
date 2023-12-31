@@ -26,7 +26,6 @@ include_directories(src test)
 find_package(GTest REQUIRED)
 
 add_executable(babel_tests ${TEST_FILES})
-target_compile_options(babel_tests PRIVATE -g -O0 --coverage)
 target_include_directories(babel_tests PRIVATE ${GTEST_INCLUDE_DIRS})
 target_link_libraries(babel_tests PRIVATE GTest::GTest GTest::Main)
 target_link_libraries(babel_tests PRIVATE ${Boost_LIBRARIES})
