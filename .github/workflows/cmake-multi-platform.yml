@@ -96,8 +96,9 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      
+      #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
       run: |
-#ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
         cmake --build . --target coverage
         ls
