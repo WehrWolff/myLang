@@ -86,7 +86,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
             COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
             COMMAND lcov --list coverage.info
         )
-    elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC|CL|cl|Cl")
         # Enable code coverage for MSVC
         target_compile_options(babel PRIVATE /MDd /Zi)
         target_link_options(babel PRIVATE /DEBUG /OPT:REF /OPT:ICF)
@@ -97,8 +97,5 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
             COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
             COMMAND clcov --sources ${CMAKE_SOURCE_DIR} --dir . --binary-dir ${CMAKE_BINARY_DIR} --output coverage.xml
         )
-    else()
-        message("We are on MSVC but that did not get recognized")
-        message(CMAKE_CXX_COMPILER_ID)
     endif()
 endif()
