@@ -9,14 +9,14 @@ TEST(GrammarTest, AxiomAndRules) {
     ASSERT_EQ(a, grammar.firsts.at("A"));
     ASSERT_EQ(UnifiedItem(Rule(grammar, "A -> a A"), 1), UnifiedItem(Rule(grammar, "A -> a A"), 1));
     ASSERT_EQ(0, indexOf(UnifiedItem(Rule(grammar, "A -> a A"), 1), {UnifiedItem(Rule(grammar, "A -> a A"), 1)}));
-} /*
+}
 
 TEST(LRClosureTableTest, ClosureAndKernels) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
     LRClosureTable lrClosureTable(grammar);
     ASSERT_EQ(3, lrClosureTable.kernels.front().closure.size());
     ASSERT_EQ(4, lrClosureTable.kernels.size());
-}
+} /*
 
 TEST(LRTableTest, States) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
