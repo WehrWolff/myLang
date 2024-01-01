@@ -106,6 +106,7 @@ jobs:
         ${{ matrix.cmd }}
         pip install codecov
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
+        cmake --build . --config ${{ matrix.build_type }} --target coverage
       #make coverage
       #cmake --build . --target coverage
 
