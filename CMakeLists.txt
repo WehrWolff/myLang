@@ -86,16 +86,15 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
             COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
             COMMAND lcov --list coverage.info
         )
-    elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC|CL|cl|Cl")
+        elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         # Enable code coverage for MSVC
-        target_compile_options(babel PRIVATE /MDd /Zi)
-        target_link_options(babel PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+        target_compile_options(babel PRIVATE /MDd /Zi /Z7)
+        target_link_options(babel PRIVATE /DEBUG /OPT:REF /OPT:ICF /INCREMENTAL:NO)
         
-        message("Oh hey MSVC got recognized")
-        # Add a custom target 'coverage' for generating code coverage reports using clcov
+        # Add a custom target 'coverage' for generating code coverage reports using codecov
         add_custom_target(coverage
             COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
-            COMMAND clcov --sources ${CMAKE_SOURCE_DIR} --dir . --binary-dir ${CMAKE_BINARY_DIR} --output coverage.xml
+            COMMAND codecov -f coverage.xml
         )
     endif()
 endif()
