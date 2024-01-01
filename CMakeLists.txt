@@ -53,27 +53,48 @@ add_test(NAME BabelTests COMMAND babel_tests)
 
 
 # Add the following lines to enable code coverage
-if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-    target_compile_options(babel PRIVATE --coverage)
-    target_link_libraries(babel PRIVATE --coverage)
-endif()
-
-# Add the following lines to enable code coverage for MSVC
-if (CMAKE_BUILD_TYPE STREQUAL "Release" AND MSVC)
-    target_compile_options(babel PRIVATE /analyze /coveragemodule)
-    target_link_options(babel PRIVATE /PROFILE)
-endif()
+#if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+#    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+#    target_compile_options(babel PRIVATE --coverage)
+#    target_link_libraries(babel PRIVATE --coverage)
+#endif()
 
 # Add a custom target for generating coverage reports
-if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    add_custom_target(coverage
-        COMMAND lcov --directory . --capture --output-file coverage.info
-        COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
-        COMMAND lcov --list coverage.info
-        COMMAND genhtml coverage.info --output-directory coverage_report
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        COMMENT "Generating code coverage report"
-    )
+#if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+#    add_custom_target(coverage
+#        COMMAND lcov --directory . --capture --output-file coverage.info
+#        COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
+#        COMMAND lcov --list coverage.info
+#        COMMAND genhtml coverage.info --output-directory coverage_report
+#        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#        COMMENT "Generating code coverage report"
+#    )
+#endif()
+
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        # Enable code coverage for GCC or Clang
+        target_compile_options(babel PRIVATE -fprofile-arcs -ftest-coverage)
+        target_link_options(babel PRIVATE --coverage)
+        
+        # Add a custom target 'coverage' for generating code coverage reports
+        add_custom_target(coverage
+            COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+            COMMAND lcov --directory . --capture --output-file coverage.info
+            COMMAND lcov --remove coverage.info '/usr/*' --output-file coverage.info
+            COMMAND lcov --list coverage.info
+        )
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        # Enable code coverage for MSVC
+        target_compile_options(babel PRIVATE /MDd /Zi)
+        target_link_options(babel PRIVATE /DEBUG /OPT:REF /OPT:ICF)
+        
+        # Add a custom target 'coverage' for generating code coverage reports using clcov
+        add_custom_target(coverage
+            COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+            COMMAND clcov --sources ${CMAKE_SOURCE_DIR} --dir . --binary-dir ${CMAKE_BINARY_DIR} --output coverage.xml
+        )
+    endif()
 endif()
