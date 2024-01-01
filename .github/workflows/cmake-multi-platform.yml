@@ -48,7 +48,7 @@ jobs:
             c_compiler: clang
             cpp_compiler: clang++
             conan_compiler: clang
-            compiler_version: 15
+            compiler_version: 11
             #Possible values are ['libstdc++', 'libstdc++11', 'libc++', 'c++_shared', 'c++_static']
             #libcxx: --settings=compiler.libcxx=libc++
             cmd: sudo apt-get install lcov
