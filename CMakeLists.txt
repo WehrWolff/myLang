@@ -91,10 +91,14 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
         target_compile_options(babel PRIVATE /MDd /Zi)
         target_link_options(babel PRIVATE /DEBUG /OPT:REF /OPT:ICF)
         
+        message("Oh hey MSVC got recognized")
         # Add a custom target 'coverage' for generating code coverage reports using clcov
         add_custom_target(coverage
             COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
             COMMAND clcov --sources ${CMAKE_SOURCE_DIR} --dir . --binary-dir ${CMAKE_BINARY_DIR} --output coverage.xml
         )
+    else()
+        message("We are on MSVC but that did not get recognized")
+        message(CMAKE_CXX_COMPILER_ID)
     endif()
 endif()
