@@ -50,7 +50,7 @@ jobs:
             conan_compiler: clang
             compiler_version: 15
             #Possible values are ['libstdc++', 'libstdc++11', 'libc++', 'c++_shared', 'c++_static']
-            libcxx: --settings=compiler.libcxx=c++_static
+            libcxx: --settings=compiler.libcxx=libc++
             cmd: sudo apt-get install lcov
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
 #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/runner/.bashrc && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install libcxx
