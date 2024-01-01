@@ -35,7 +35,7 @@ TEST(GrammarTest, AnotherGrammar) {
     Grammar grammar1("A' -> A\nA -> B\nA -> ''\nB -> ( A )");
     ASSERT_EQ("A'", grammar1.axiom);
     ASSERT_EQ(4, grammar1.rules.size());
-    std::list<std::string> a1 = {EPSILON, "("};
+    std::list<std::string> a1 = {"''", "("};
     ASSERT_EQ(a1, grammar1.firsts.at("A"));
 }
 
