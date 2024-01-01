@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "lrparser.h"
 
-/* TEST(GrammarTest, AxiomAndRules) {
+TEST(GrammarTest, AxiomAndRules) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
     ASSERT_EQ("A'", grammar.axiom);
     ASSERT_EQ(3, grammar.rules.size());
@@ -9,7 +9,7 @@
     ASSERT_EQ(a, grammar.firsts.at("A"));
     ASSERT_EQ(UnifiedItem(Rule(grammar, "A -> a A"), 1), UnifiedItem(Rule(grammar, "A -> a A"), 1));
     ASSERT_EQ(0, indexOf(UnifiedItem(Rule(grammar, "A -> a A"), 1), {UnifiedItem(Rule(grammar, "A -> a A"), 1)}));
-}
+} /*
 
 TEST(LRClosureTableTest, ClosureAndKernels) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");

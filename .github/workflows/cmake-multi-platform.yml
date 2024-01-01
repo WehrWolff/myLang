@@ -74,10 +74,6 @@ jobs:
 
     - name: Manage Packages with Conan          
       run: |
-        sudo apt-get update
-        sudo apt-get install libc++abi1
-        sudo apt-get install libc6-dev
-        pip install numpy
         pip install conan
         conan profile detect || true
         conan install . --output-folder=./build --build=missing --settings=compiler.cppstd=20 --settings=build_type=${{ matrix.build_type }} --settings=compiler=${{ matrix.conan_compiler }} --settings=compiler.version=${{ matrix.compiler_version }} ${{ matrix.libcxx }}
