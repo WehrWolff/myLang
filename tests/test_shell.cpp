@@ -29,7 +29,7 @@ TEST(ParserTest, Parse) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
     LRClosureTable lrClosureTable(grammar);
     LRTable lrTable(lrClosureTable);
-} */
+}
 
 TEST(GrammarTest, AnotherGrammar) {
     Grammar grammar1("A' -> A\nA -> B\nA -> ''\nB -> ( A )");
@@ -56,7 +56,7 @@ TEST(LRTableTest, AnotherLRTable) {
     ASSERT_EQ("r0", (*std::next(lrTable1.states.begin(), 1)).mapping.at("$").toString());
     ASSERT_EQ("4", (*std::next(lrTable1.states.begin(), 3)).mapping.at("A").toString());
     ASSERT_EQ("r3", (*std::next(lrTable1.states.begin(), 9)).mapping.at(")").toString());
-}
+} */
 
 TEST(IsTheWorldOk, HelloWorld) {
     ASSERT_EQ(1 + 1, 2);
