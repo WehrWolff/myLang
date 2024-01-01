@@ -9,18 +9,14 @@ TEST(GrammarTest, AxiomAndRules) {
     ASSERT_EQ(a, grammar.firsts.at("A"));
     ASSERT_EQ(UnifiedItem(Rule(grammar, "A -> a A"), 1), UnifiedItem(Rule(grammar, "A -> a A"), 1));
     ASSERT_EQ(0, indexOf(UnifiedItem(Rule(grammar, "A -> a A"), 1), {UnifiedItem(Rule(grammar, "A -> a A"), 1)}));
+}
 
+TEST(LRClosureTableTest, ClosureAndKernels) {
+    Grammar grammar("A' -> A\nA -> a A\nA -> a");
     LRClosureTable lrClosureTable(grammar);
     ASSERT_EQ(3, lrClosureTable.kernels.front().closure.size());
     ASSERT_EQ(4, lrClosureTable.kernels.size());
 }
-
-TEST(LRClosureTableTest, ClosureAndKernels) {
-    Grammar grammar_("A' -> A\nA -> a A\nA -> a");
-    LRClosureTable lrClosureTable(grammar_);
-    ASSERT_EQ(3, lrClosureTable.kernels.front().closure.size());
-    ASSERT_EQ(4, lrClosureTable.kernels.size());
-} /*
 
 TEST(LRTableTest, States) {
     Grammar grammar("A' -> A\nA -> a A\nA -> a");
@@ -60,10 +56,6 @@ TEST(LRTableTest, AnotherLRTable) {
     ASSERT_EQ("r0", (*std::next(lrTable1.states.begin(), 1)).mapping.at("$").toString());
     ASSERT_EQ("4", (*std::next(lrTable1.states.begin(), 3)).mapping.at("A").toString());
     ASSERT_EQ("r3", (*std::next(lrTable1.states.begin(), 9)).mapping.at(")").toString());
-} */
-
-TEST(IsTheWorldOk, HelloWorld) {
-    ASSERT_EQ(1 + 1, 2);
 }
 
 int main(int argc, char **argv) {
