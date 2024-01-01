@@ -60,6 +60,12 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|C
     target_link_libraries(babel PRIVATE --coverage)
 endif()
 
+# Add the following lines to enable code coverage for MSVC
+if (CMAKE_BUILD_TYPE STREQUAL "Release" AND MSVC)
+    target_compile_options(babel PRIVATE /analyze /coveragemodule)
+    target_link_options(babel PRIVATE /PROFILE)
+endif()
+
 # Add a custom target for generating coverage reports
 if (CMAKE_BUILD_TYPE STREQUAL "Release" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_custom_target(coverage

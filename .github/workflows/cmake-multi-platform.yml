@@ -32,6 +32,9 @@ jobs:
             cpp_compiler: cl
             conan_compiler: msvc
             compiler_version: 193
+            cmd: 
+              @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+              choco install lcov
             conan_toolchain_path: build/build/generators/conan_toolchain.cmake
           - os: ubuntu-latest
             c_compiler: gcc
@@ -39,6 +42,7 @@ jobs:
             conan_compiler: gcc
             compiler_version: 11
             libcxx: --settings=compiler.libcxx=libstdc++11
+            cmd: sudo apt-get install lcov
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
           - os: ubuntu-latest
             c_compiler: clang
@@ -46,6 +50,7 @@ jobs:
             conan_compiler: clang
             compiler_version: 15
             libcxx: --settings=compiler.libcxx=libstdc++11
+            cmd: sudo apt-get install lcov
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
 #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/runner/.bashrc && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install libcxx
         exclude:
@@ -97,9 +102,8 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       
       #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
-      #sudo apt-get install lcov
       run: |
-        pip install lcov
+        ${{ matrix.cmd }}
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
         make coverage
       #cmake --build . --target coverage
