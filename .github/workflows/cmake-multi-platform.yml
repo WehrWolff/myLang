@@ -32,9 +32,6 @@ jobs:
             cpp_compiler: cl
             conan_compiler: msvc
             compiler_version: 193
-            #cmd: |
-            #  @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-            #  choco install lcov
             conan_toolchain_path: build/build/generators/conan_toolchain.cmake
           - os: ubuntu-latest
             c_compiler: gcc
@@ -42,16 +39,13 @@ jobs:
             conan_compiler: gcc
             compiler_version: 11
             libcxx: --settings=compiler.libcxx=libstdc++11
-            cmd: sudo apt-get install lcov
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
             conan_compiler: clang
-            compiler_version: 11
-            #Possible values are ['libstdc++', 'libstdc++11', 'libc++', 'c++_shared', 'c++_static']
-            #libcxx: --settings=compiler.libcxx=libc++
-            cmd: sudo apt-get install lcov
+            compiler_version: 15
+            libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
 #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/runner/.bashrc && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install libcxx
         exclude:
@@ -73,7 +67,7 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
     - name: Manage Packages with Conan          
-      run: |        
+      run: |
         pip install conan
         conan profile detect || true
         conan install . --output-folder=./build --build=missing --settings=compiler.cppstd=20 --settings=build_type=${{ matrix.build_type }} --settings=compiler=${{ matrix.conan_compiler }} --settings=compiler.version=${{ matrix.compiler_version }} ${{ matrix.libcxx }}
@@ -88,12 +82,14 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/${{ matrix.conan_toolchain_path }}
+        -DCODE_COVERAGE=ON
         -S ${{ github.workspace }}
       #-G "Unix Makefiles"
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
-      run: |        
+      run: |
+        sudo apt-get install lcov
         cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
     - name: Test
@@ -103,12 +99,8 @@ jobs:
       
       #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
       run: |
-        ${{ matrix.cmd }}
-        pip install codecov
         ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
-        cmake --build . --config ${{ matrix.build_type }} --target coverage
-      #make coverage
-      #cmake --build . --target coverage
+        cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
