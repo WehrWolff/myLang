@@ -33,6 +33,7 @@ jobs:
             conan_compiler: msvc
             compiler_version: 193
             conan_toolchain_path: build/build/generators/conan_toolchain.cmake
+            cmd: opencppcoverage --export_type cobertura:coverage.xml
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -40,6 +41,7 @@ jobs:
             compiler_version: 11
             libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
+            cmd: make coverage
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
@@ -47,6 +49,7 @@ jobs:
             compiler_version: 15
             libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
+            cmd: make coverage
 #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/runner/.bashrc && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install libcxx
         exclude:
           - os: windows-latest
@@ -58,6 +61,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: microsoft/setup-msbuild@v1
+    - uses: docker://opencppcoverage/opencppcoverage-win-x64:latest
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -98,8 +103,8 @@ jobs:
       
       #ctest --build-config ${{ matrix.build_type }} --output-on-failure -fprofile-arcs -ftest-coverage
       run: |
-        ctest --build-config ${{ matrix.build_type }} --output-on-failure CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
-        make coverage
+        ctest --build-config ${{ matrix.build_type }} --output-on-failure --verbose CTEST_CUSTOM_PRE_TEST="CC='gcc -fprofile-arcs -ftest-coverage' CXX='g++ -fprofile-arcs -ftest-coverage'"
+        ${{ matrix.cmd }}
       #cmake --build . --target coverage
 
     - name: Upload coverage reports to Codecov
