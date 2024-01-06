@@ -33,7 +33,13 @@ jobs:
             conan_compiler: msvc
             compiler_version: 193
             conan_toolchain_path: build/build/generators/conan_toolchain.cmake
-            cmd: opencppcoverage --export_type cobertura:coverage.xml
+          - os: windows-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            conan_compiler: clang
+            compiler_version: 193
+            conan_toolchain_path: build/build/generators/conan_toolchain.cmake
+            cmd: make coverage
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -54,15 +60,13 @@ jobs:
         exclude:
           - os: windows-latest
             c_compiler: gcc
-          - os: windows-latest
-            c_compiler: clang
+          #- os: windows-latest
+          #  c_compiler: clang
           - os: ubuntu-latest
             c_compiler: cl
 
     steps:
     - uses: actions/checkout@v3
-    - uses: microsoft/setup-msbuild@v1
-    - uses: docker://opencppcoverage/opencppcoverage-win-x64:latest
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
