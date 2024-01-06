@@ -37,14 +37,14 @@ jobs:
             c_compiler: clang
             cpp_compiler: clang++
             conan_compiler: clang
-            compiler_version: 193
+            compiler_version: 15
             conan_toolchain_path: build/build/generators/conan_toolchain.cmake
             cmd: make coverage
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
             conan_compiler: gcc
-            compiler_version: 11
+            compiler_version: 17
             libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
             cmd: make coverage
