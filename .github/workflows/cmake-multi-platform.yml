@@ -44,7 +44,7 @@ jobs:
             c_compiler: gcc
             cpp_compiler: g++
             conan_compiler: gcc
-            compiler_version: 17
+            compiler_version: 13
             libcxx: --settings=compiler.libcxx=libstdc++11
             conan_toolchain_path: build/build/Release/generators/conan_toolchain.cmake
             cmd: make coverage
